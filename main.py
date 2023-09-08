@@ -11,6 +11,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LassoCV
 from sklearn.model_selection import RepeatedKFold
 from sklearn.svm import LinearSVC
+import warnings
+warnings.filterwarnings("ignore")
+
 '''
 House Price Prediction(Task1)
 Use a dataset that includes information about
@@ -77,7 +80,7 @@ class data_analysis:
             dtype: object
             '''
             self.df.drop(labels='id',axis=1,inplace=True)
-            print(self.df.dtypes) #dropped the id column as it is nonsense to carry our statical description having the column in the analysis
+            #print(self.df.dtypes) #dropped the id column as it is nonsense to carry our statical description having the column in the analysis
             '''
             date              object
             price            float64
@@ -144,7 +147,7 @@ class data_analysis:
                     floor_price=floor_price['price']
                     floor_price_median=np.median(floor_price)
                     floor_price_median_list.append(floor_price_median)
-                print(floor_price_median_list)#[390000.0, 524475.0, 542950.0, 799200.0, 490000.0, 534500.0]
+                #print(floor_price_median_list)#[390000.0, 524475.0, 542950.0, 799200.0, 490000.0, 534500.0]
                 def graph_floor_count():
                     '''
                     showing the graph that compares between floor and price
@@ -153,8 +156,9 @@ class data_analysis:
                     Y=self.df["price"]
                     #print(Y)
                     sns.boxplot(x=X,y=Y,data=self.df)
+                    plt.savefig('floor and price')
                     plt.show()
-                    plt.savefig('floor and price') # there are many outliers coming from the number of floors and price
+                    # there are many outliers coming from the number of floors and price
                 graph_floor_count()
             def  graph_watervsprice():
                 '''
@@ -163,8 +167,9 @@ class data_analysis:
                 X=self.df['waterfront']
                 Y=self.df['price']
                 sns.boxplot(x=X,y=Y,data=self.df)
-                plt.show()
+            
                 plt.savefig('waterfront vs price')
+                plt.show()
             median_floor_count_price()
             graph_watervsprice()
         exploratory_floor_count()
@@ -190,7 +195,7 @@ class data_analysis:
             X=self.df[features]
             Y=self.df['price']
             lm.fit(X,Y)
-            print(lm.score(X,Y))#0.6577024445001938
+            print('The accuracy result of the linear model is '+str(lm.score(X,Y)))#0.6577024445001938
             
         def Pipelines():
             
@@ -210,8 +215,8 @@ class data_analysis:
             Y=self.df['price']
             pipe1.fit(X,Y)
             pipe2.fit(X,Y)               
-            print(pipe1.score(X,Y))#0.6576911310530571
-            print(pipe2.score(X,Y))#0.6576911310530571
+            print('The accuracy result of the linear model with variance threshold as feature selection technique is '+str(pipe1.score(X,Y)))#0.6576911310530571
+            print('The accuracy result of the linear model with SelectKBest as feature selection technique is '+str(pipe2.score(X,Y)))#0.6576911310530571
             
             #Still the score isnot enhanced alot so the model must be changed
         def Lasso_Polynomial():
@@ -224,7 +229,7 @@ class data_analysis:
             model = LassoCV(alphas=np.arange(0, 1, 0.1), cv=cv, n_jobs=-1)
             # fit model
             model.fit(x_test, y_test)
-            print(model.score(x_test, y_test))#0.6554377506441982
+            print('The accuracy result of the Lasso model is '+str(model.score(x_test, y_test)))#0.6554377506441982
             pr = PolynomialFeatures(degree=2)
             x_train_pr = pr.fit_transform(x_train)
             x_test_pr = pr.fit_transform(x_test)
@@ -242,7 +247,7 @@ class data_analysis:
             x_train_pr = pr.fit_transform(x_train)
             x_test_pr = pr.fit_transform(x_test)
             Ridge_test.fit(x_train_pr, y_train)
-            print(Ridge_test.score(x_train_pr, y_train))#0.7423548624883267
+            print('The accuracy of  ridge test implemented by polynomial feature is '+str(Ridge_test.score(x_train_pr, y_train)))#0.7423548624883267
             
             
         Linear_model()
